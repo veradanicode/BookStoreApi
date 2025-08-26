@@ -36,7 +36,7 @@ const getSingleBooksByID = async(req,res) =>{
         }
         res.status(200).json({
             succes:true,
-            data:getBookbyID
+            data:getBookbyIDs
         })
     } catch (error) {
            console.log('Error:',error);
@@ -78,7 +78,26 @@ const updateBook = async(req,res) =>{
 }
 
 const deleteBook = async(req,res) =>{
-    
+    try {
+        const findBookAndDeleteByID= await Book.findByIdAndDelete(req.params.id)
+        if (!findBookAndDeleteByID) {
+            return res.status(404).json({
+                success:false,
+                message:"Book with the current ID is not found and can not be deleted!Please try with a different ID"
+            })
+        }
+        res.status(200).json({
+            success:true,
+            message:"Book deleted Succesfully!",
+            data:findBookAndDeleteByID
+        })
+    } catch (error) {
+         console.log('Error:',error);
+         res.status(500).json({
+            success:false,
+            message:"Something went wrong!Please try again."
+        })
+    }
 }
 
 
