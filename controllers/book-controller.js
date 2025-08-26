@@ -74,7 +74,32 @@ const addNewBook = async(req,res) =>{
 }
 
 const updateBook = async(req,res) =>{
-    
+    try {
+            const findBookAndUpdate =await Book.findByIdAndUpdate(
+                req.params.id,
+                req.body,
+                {
+                    new:true
+                })
+        
+            if (!findBookAndUpdate) {
+            return res.status(404).json({
+                        success:false,
+                        message:"Book with the current ID is not found and can not be updated!Please try with a different ID"
+                    }) 
+            }  
+            res.status(200).json({
+                success:true,
+                message:"Book Updated succcessfully!",
+                data:findBookAndUpdate
+            }) 
+    } catch (error) {
+           console.log('Error:',error);
+         res.status(500).json({
+            success:false,
+            message:"Something went wrong!Please try again."
+        })   
+    } 
 }
 
 const deleteBook = async(req,res) =>{
